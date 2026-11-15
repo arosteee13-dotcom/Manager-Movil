@@ -4346,14 +4346,15 @@ const REALDB = (() => {
   const load = () => { unload(); const m = mode(); if (m !== "fake" && store[m] && !apply(store[m].text)) toast("La base de datos no es válida"); };
   const setMode = m => { try { localStorage.setItem(MODE_KEY, m); } catch(e){} load(); render(); };
   const size = n => n > 1048576 ? (n / 1048576).toFixed(1) + " MB" : Math.max(1, Math.round(n / 1024)) + " KB";
-  const online = () => /^https?:/.test(location.protocol);
+  const online = () => navigator.onLine !== false;
+  const CLOUD = "https://raw.githubusercontent.com/arosteee13-dotcom/Manager-Movil/main/jugadores-reales.js";
   function render(){
     const fake = $("#dbFake"), real = $("#dbReal"), cus = $("#dbCustom"); if (!real) return;
     const m = mode(), R = store.real, C = store.custom;
     fake.classList.toggle("sel", m === "fake");
     real.classList.toggle("sel", m === "real"); real.classList.toggle("off", !R);
     cus.classList.toggle("sel", m === "custom"); cus.classList.toggle("off", !C);
-    $("#dbRealTag").className = "dbtag" + (R ? " ok" : ""); $("#dbRealTag").textContent = R ? (m === "real" ? "En uso" : "Lista") : (net === "wait" ? "Descargando…" : online() ? "Sin conexión" : "Solo desde internet");
+    $("#dbRealTag").className = "dbtag" + (R ? " ok" : ""); $("#dbRealTag").textContent = R ? (m === "real" ? "En uso" : "Lista") : (net === "wait" ? "Descargando…" : "Sin conexión");
     $("#dbRealTxt").textContent = R ? `Repositorio · ${size(R.meta.size)}` : "Datos actualizados del repositorio de GitHub.";
     $("#dbUse").style.display = R ? "" : "none";
     $("#dbCusTag").className = "dbtag" + (C ? " ok" : ""); $("#dbCusTag").textContent = C ? (m === "custom" ? "En uso" : "Lista") : "Sin importar";
@@ -4374,7 +4375,7 @@ const REALDB = (() => {
     if (!online()) return false;
     net = "wait"; render();
     try {
-      const r = await fetch("jugadores-reales.js?v=" + Date.now(), { cache:"no-store" });
+      const r = await fetch(CLOUD + "?v=" + Date.now(), { cache:"no-store" });
       const t = r.ok ? await r.text() : "";
       if (t){
         if (!store.real || store.real.text !== t){
@@ -4393,7 +4394,7 @@ const REALDB = (() => {
     if (await refreshReal()){ load(); render(); }
     else render();
   }
-  async function useReal(){ await refreshReal(); if (!store.real){ toast(online() ? "No se pudo descargar la base de datos" : "Abre el juego desde internet para usar la base del repositorio"); return false; } setMode("real"); return true; }
+  async function useReal(){ await refreshReal(); if (!store.real){ toast("No se pudo descargar la base de datos del repositorio"); return false; } setMode("real"); return true; }
   return { boot, render, setMode, importFile, useReal, mode, hasReal: () => !!store.real, hasCustom: () => !!store.custom };
 })();
 $("#dbImp").onclick = e => { e.stopPropagation(); $("#dbFile").value = ""; $("#dbFile").click(); };
