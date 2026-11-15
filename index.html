@@ -172,7 +172,8 @@
   .cs-tx small{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--dim)}
   .cs-tx b{font-size:15px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .cs-tx em{font-style:normal;font-size:12px;color:var(--dim)}
-  .cp-o{padding:10px 14px}
+  .cp-o{padding:5px 14px}
+  .cp-o .cs-ic.sm{width:30px;height:30px;border-radius:9px}
   .cp-tag{font-size:10.5px;font-weight:700;color:var(--acc);border:1px solid var(--acc);border-radius:999px;padding:2px 8px}
   .rules-t{font-size:13px;line-height:1.45;color:var(--dim);margin:2px 0 4px}
   .oc-pitch{margin:0 0 4px}.oc-pl{position:absolute;transform:translate(-50%,-50%);width:70px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;z-index:1}.oc-av{width:34px;height:34px;border-radius:50%;overflow:hidden;display:block;border:2px solid #e0b84c;background:var(--card)}.oc-av .av,.oc-av img{width:100%;height:100%;object-fit:cover}.oc-nm{background:rgba(0,0,0,.55);color:#fff;font-size:10px;font-weight:700;padding:1px 5px;border-radius:5px;max-width:70px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.oc-ov{color:#fff;font-size:11px;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.7)}
@@ -2215,11 +2216,56 @@ const PAL_REAL = {
   CEL:{d2:4,d3:1,d4:1},
   DEP:{league:1,cup:2,d2:4,sc:3,d3:1},
   MAL:{d2:1,d3:1,d4:1},
+  /* Inglaterra (Premier League y Championship): palmarés real de Mister, clubes de la base */
+  MCI:{fa:8,ucl:1,wc:1,sce:1,pl:10,efl:9,ch:7,cs:7},
+  LIV:{fa:8,ucl:6,wc:1,uel:3,sce:4,pl:20,efl:10,ch:4,cs:11},
+  ARS:{pl:14,cs:17,fa:14,efl:2},
+  CHE:{fa:8,ucl:2,wc:2,uel:2,sce:2,pl:6,efl:5,ecl:1,ch:2,cs:4},
+  MUN:{fa:13,ucl:3,wc:1,uel:1,sce:1,pl:20,efl:6,ch:2,cs:16},
+  NEW:{fa:6,pl:4,efl:1,cs:1,ch:4},
+  TOT:{fa:8,pl:2,uel:3,efl:4,cs:4,ch:2},
+  AVL:{fa:7,ucl:1,uel:1,sce:1,pl:7,efl:5,ch:2},
+  BHA:{cs:2,l1:1,l2:1},
+  CRY:{ecl:1,cs:1,fa:1,ch:2},
+  FUL:{ch:3},
+  EVE:{pl:9,fa:5,cs:8,ch:1,cwc:1},
+  NFO:{fa:2,ucl:2,sce:1,pl:1,efl:4,cs:1,ch:3},
+  BRE:{ch:1,l2:1},
+  LEE:{fa:1,pl:3,efl:1,cs:2,ch:5},
+  BOU:{ch:1},
+  SUN:{pl:6,fa:2,cs:1,ch:5,eflt:1},
+  COV:{fa:1,ch:2,l1:1,eflt:1},
+  IPS:{pl:1,uel:1,fa:1,ch:3},
+  HUL:{l1:1},
+  WHU:{ecl:1,cwc:1,fa:3,ch:2},
+  WOL:{fa:4,pl:3,efl:2,cs:1,ch:4,l1:1},
+  BUN:{pl:2,fa:1,cs:1,ch:4},
+  SOU:{fa:1,eflt:1},
+  MID:{efl:1,ch:4},
+  SHU:{pl:1,fa:4,ch:1,l1:1,cs:1},
+  NOR:{efl:2,ch:5,l1:1},
+  WBA:{pl:1,fa:5,efl:1,cs:1,ch:3},
+  WAT:{},
+  BRC:{ch:1,l1:1,eflt:1},
+  STK:{efl:1,ch:2},
+  BIR:{efl:2,ch:4,l1:1},
+  BLB:{pl:3,fa:6,efl:1,cs:1,ch:1},
+  MLW:{ch:1,l1:1},
+  QPR:{efl:1,ch:2},
+  DER:{pl:2,fa:1,cs:1,ch:4},
+  PMH:{pl:2,fa:2,ch:1,l1:1,l2:1,eflt:1},
+  SWA:{efl:1,l1:1,eflt:1},
+  CAR:{fa:1,cs:1,ch:1},
+  PRE:{pl:2,fa:2,ch:3},
+  WRE:{nl:1,eflt:1,fat:1},
+  BWT:{fa:4,cs:1,ch:3,eflt:1},
+  CHA:{fa:1,ch:1,l1:1},
+  LIN:{l1:1,l2:1,nl:1,eflt:1},
 };
 // ===== pestaña Club: ficha, objetivo e historial =====
-const PAL_COL = { league:"#e0b84c", cup:"#c9ced8", sc:"#cd8b4a", ucl:"#5b9cf0", uel:"#f59e0b", sce:"#5b9cf0", wc:"#3fbf6a", ifc:"#3fbf6a", d2:"#a78bfa", d3:"#8a8fa3", d4:"#8a8fa3" };
-const PAL_LBL = [["league","LaLiga EA Sports"],["cup","Copa del Rey"],["sc","Supercopa de España"],["ucl","Champions League"],["uel","Europa League"],["sce","Supercopa de Europa"],["wc","Mundial de Clubes"],["ifc","Copa Intercontinental"],["d2","LaLiga Hypermotion"],["d3","Primera Federación"],["d4","Segunda Federación"]];
-const PAL_IMG = { league:1, cup:129, sc:132, ucl:107, uel:117, sce:133, wc:137, ifc:2976, d2:2, d3:2468, d4:2469 };   // imágenes de trofeos: mismos ids que usa Mister
+const PAL_COL = { league:"#e0b84c", cup:"#c9ced8", sc:"#cd8b4a", ucl:"#5b9cf0", uel:"#f59e0b", sce:"#5b9cf0", wc:"#3fbf6a", ifc:"#3fbf6a", d2:"#a78bfa", d3:"#8a8fa3", d4:"#8a8fa3", pl:"#e0b84c", ch:"#a78bfa", l1:"#8a8fa3", l2:"#8a8fa3", nl:"#8a8fa3", fa:"#c9ced8", efl:"#cd8b4a", cs:"#cd8b4a", eflt:"#8a8fa3", fat:"#8a8fa3", ecl:"#3fbf6a", cwc:"#5b9cf0" };
+const PAL_LBL = [["league","LaLiga EA Sports"],["cup","Copa del Rey"],["sc","Supercopa de España"],["ucl","Champions League"],["uel","Europa League"],["sce","Supercopa de Europa"],["wc","Mundial de Clubes"],["ifc","Copa Intercontinental"],["d2","LaLiga Hypermotion"],["d3","Primera Federación"],["d4","Segunda Federación"],["pl","Premier League"],["ch","Championship"],["l1","League One"],["l2","League Two"],["nl","National League"],["fa","FA Cup"],["efl","EFL Cup"],["cs","Community Shield"],["eflt","Football League Trophy"],["fat","FA Trophy"],["ecl","Conference League"],["cwc","Copa de Ganadores de Copa"]];
+const PAL_IMG = { league:1, cup:129, sc:132, ucl:107, uel:117, sce:133, wc:137, ifc:2976, d2:2, d3:2468, d4:2469, pl:10, fa:139, cs:322, efl:523, ch:25, l1:87, l2:88, eflt:1870, fat:1913, ecl:2492, cwc:1722 };   // imágenes de trofeos: mismos ids que usa Mister
 function palGridOf(real){
   return PAL_LBL.filter(([k])=>real[k]>0).map(([k,l])=>`<div class="pal-c"><span class="pal-ic"><img src="https://cdn.resfu.com/img_data/competiciones/copa/${PAL_IMG[k]}.png?size=120x&lossy=1" alt="" loading="lazy" onerror="this.parentNode.classList.add('nf')">${trophySVG(PAL_COL[k]||"#e0b84c")}</span><span class="pal-t"><b>${real[k]}</b><small>${l}</small></span></div>`).join("");
 }
@@ -2587,6 +2633,13 @@ const NAT_UK = { EN:"Inglaterra", SC:"Escocia", WA:"Gales", GB:"Inglaterra" };
 function natName(c){ if (NAT_UK[String(c).toUpperCase()]) return NAT_UK[String(c).toUpperCase()]; try { return new Intl.DisplayNames(["es"], { type:"region" }).of(String(c).toUpperCase()) || c; } catch(e){ return c; } }
 function openPlayer(p){
   if (!p) return;
+  if (!state){   // antes de empezar: ficha de solo lectura con un estado temporal
+    const c = sqClub || {};
+    state = { preview:true, squad:[], loans:[], filial:null, cantera:null, season:1, division:(sqInfo && sqInfo.div) || "", country:"", mine:0, lineup:null,
+      teams:[Object.assign({}, c, { cid:c.id, kit:c.kit || [c.c1 || "#888", c.c2 || "#888"] })] };
+    const sh = $("#playerSheet"), ob = new MutationObserver(() => { if (sh.classList.contains("hidden") && state && state.preview){ state = null; ob.disconnect(); } });
+    ob.observe(sh, { attributes:true, attributeFilter:["class"] });
+  }
   fillAttr(p); psPlayer = p; psTab = "info"; psAct = null; psMenu = false; psOffers = {}; psYears = 3; psNeg = null; psRes = null;
   renderPlayer();
   openAnim($("#playerSheet"));
@@ -2713,7 +2766,7 @@ function renderPlayer(){
           <div class="pi-hq"><div><small>GRL</small><b style="color:${grlC(p.ovr)}">${p.ovr}</b></div><div><small>POT</small><b style="color:${grlC(p.pot)}">${p.pot}</b></div></div></div>
         <button class="pi-x" data-close aria-label="Cerrar">×</button></div></div>
     ${psMenu ? "" : tabs}<div class="pi-body">${psMenu ? actionsHTML(p) : body}</div>
-    ${psTab === "info" && !psMenu && wh !== "loan" ? `<div class="pi-foot"><button class="pi-go pi-menu" data-menu>Acciones <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button></div>` : ""}`;
+    ${psTab === "info" && !psMenu && wh !== "loan" && !state.preview ? `<div class="pi-foot"><button class="pi-go pi-menu" data-menu>Acciones <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 15l6-6 6 6"/></svg></button></div>` : ""}`;
 }
 
 // ===== acciones sobre el jugador (traspaso, cesión, renovar, liberar) =====
@@ -3164,7 +3217,8 @@ function openStatSheet(key){
 }
 function closeStatSheet(){ const m = document.getElementById("statSheet"); if (!m) return; m.classList.remove("show"); setTimeout(() => m.classList.remove("on"), 220); }
 function compPalHTML(C, dv){
-  const key = ({1:"league",2:"d2",3:"d3",4:"d4"})[(dv.rules && dv.rules.tier) || 1] || "none", lab = (PAL_LBL.find(x => x[0] === key) || [])[1] || cNameOf(dv);
+  const KEYS = C.name === "Inglaterra" ? {1:"pl",2:"ch",3:"l1",4:"l2"} : {1:"league",2:"d2",3:"d3",4:"d4"};
+  const key = KEYS[(dv.rules && dv.rules.tier) || 1] || "none", lab = (PAL_LBL.find(x => x[0] === key) || [])[1] || cNameOf(dv);
   const rows = C.divs.flatMap(d => d.clubs).map(c => ({ c, n:(PAL_REAL[c.id] || {})[key] || 0 })).filter(x => x.n > 0).sort((a, b) => b.n - a.n).slice(0, 20);
   return `<div class="card"><div class="label">Palmarés histórico · ${lab}</div>` + (rows.length ? rows.map((x, i) => `<div class="st-r"><span>${i+1}</span>${shieldSVG({ logo:x.c.logo, kit:[x.c.c1, x.c.c2, 0], name:x.c.name, short:x.c.short }, 18)}<b>${x.c.name}</b><em>${x.n} ${x.n === 1 ? "título" : "títulos"}</em></div>`).join("") : `<div class="dim">Sin datos de palmarés para esta competición.</div>`) + `</div>`;
 }
