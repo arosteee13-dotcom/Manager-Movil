@@ -65,7 +65,7 @@
   .nx-name{font-size:20px;font-weight:800;line-height:1.15;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .next-card{position:relative;overflow:hidden;background:linear-gradient(120deg,var(--card) 35%,color-mix(in srgb,var(--rc,var(--acc)) 28%,var(--card)) 100%)}
   .next-card>*{position:relative}
-  #nextShield{position:absolute;right:14px;top:50%;transform:translateY(-50%);opacity:.95;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
+  #nextShield{position:absolute;right:26px;top:calc(50% + 9px);transform:translateY(-50%);opacity:.95;filter:drop-shadow(0 6px 14px rgba(0,0,0,.35))}
   .next-card .nx{display:block}
   .next-card .nx-l{padding-right:96px}
   #nextShield .badge{margin:0}
@@ -1054,6 +1054,12 @@
   .rp-foot{font-size:12px;color:var(--dim);margin-top:8px}
   .hidden{display:none!important}
   .next-actions{display:flex;gap:8px}.next-actions .btn{flex:1;min-width:0;margin-top:16px;padding:10px;font-size:15px}
+  .next-actions .sim-btn{background:color-mix(in srgb,var(--acc) 24%,transparent);border:1px solid color-mix(in srgb,var(--acc) 62%,transparent);color:#fff;font-weight:800;backdrop-filter:blur(4px)}
+  .next-actions .sim-btn:active{transform:scale(.98)}
+  .next-card .next-auto{top:10px;right:10px;width:32px;height:32px;transition:background .2s,border-color .2s,transform .2s,color .2s}
+  .next-card .next-auto.ok{background:var(--acc);border-color:var(--acc);color:#fff;transform:scale(1.08)}
+  @keyframes nxOk{0%{box-shadow:inset 0 0 0 1px transparent}35%{box-shadow:inset 0 0 0 1px var(--acc),0 0 28px -6px color-mix(in srgb,var(--acc) 75%,transparent)}100%{box-shadow:inset 0 0 0 1px transparent}}
+  .next-card.lineup-fx{animation:nxOk 1s ease}
   .live.away{display:none}
   .lv-back{position:fixed;left:0;right:0;top:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 12px;padding-top:calc(8px + env(safe-area-inset-top));background:var(--card);color:var(--txt);border-bottom:1px solid var(--line);font:600 13px system-ui}
   .lv-back.hidden{display:none}
@@ -1597,6 +1603,7 @@
       <section class="view on" id="v-home">
         <div class="advance">
           <div class="card next-card" id="nextCard">
+            <button class="auto-btn next-auto" id="nextAuto" aria-label="Once automático" title="Once automático"><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2l1.9 5.1L19 9l-5.1 1.9L12 16l-1.9-5.1L5 9l5.1-1.9zM19 14l.9 2.1L22 17l-2.1.9L19 20l-.9-2.1L16 17l2.1-.9zM5 15l.7 1.6L7.3 17l-1.6.7L5 19.3l-.7-1.6L2.7 17l1.6-.7z"/></svg></button>
             <div class="nx">
               <div class="nx-l">
                 <div class="label" id="nextLabel">Próximo partido</div>
@@ -1605,7 +1612,7 @@
               </div>
               <div id="nextShield"></div>
             </div>
-            <div class="next-actions" id="playRow"><button class="btn" id="playLive">Jugar</button><button class="btn ghost" id="play">Simular</button></div>
+            <div class="next-actions" id="playRow"><button class="btn" id="playLive">Jugar</button><button class="btn ghost sim-btn" id="play">Simular</button></div>
             <button class="btn hidden" id="nextSeason">Empezar nueva temporada</button>
             <button class="btn ghost hidden" id="seasonSum">Ver resumen de la temporada</button>
           </div>
@@ -3968,6 +3975,7 @@ function render(){
   $("#hdrSh").innerHTML = shieldSVG(me, 40);
   $("#shell").style.setProperty("--club", clubBg(me.kit[0], me.kit[1]));
   $("#playRow").classList.toggle("hidden", done);
+  const nxAuto = $("#nextAuto"); if (nxAuto) nxAuto.classList.toggle("hidden", done);
   $("#nextSeason").classList.toggle("hidden", !done);
   $("#seasonSum").classList.toggle("hidden", !done && !state.lastSeason);
 
@@ -4754,13 +4762,23 @@ function photoMeta(){
   }));
   _photoMeta = { byPid, byName }; _photoMetaKey = key; return _photoMeta;
 }
+function ownPlayerCid(p){
+  if (!state || state.mine == null || !state.teams) return null;
+  const id = p && p.id;
+  const same = x => x === p || (id && x && x.id === id);
+  if ((state.squad || []).some(same)) return state.teams[state.mine].cid;
+  if (state.cantera && (state.cantera.players || []).some(same)) return state.teams[state.mine].cid;
+  if (state.filial && (state.filial.players || []).some(same)) return state.teams[state.mine].cid;
+  if ((state.loans || []).some(l => same(l.p))) return state.teams[state.mine].cid;
+  return null;
+}
 function photoSrc(p){
   if (!p || p.gen) return null;
-  const c = sqClub || {}, key = ((p.ext && p.ext.cid) || (state && state.teams && state.teams[state.mine] && state.teams[state.mine].cid) || c.id || "")+"|"+p.name;
+  const c = sqClub || {}, key = ((p.ext && p.ext.cid) || ownPlayerCid(p) || (state && state.teams && state.teams[state.mine] && state.teams[state.mine].cid) || c.id || "")+"|"+p.name;
   const fx = window.PHOTO_FIX && PHOTO_FIX[key];
   if (fx) return fx;
   const meta = photoMeta();
-  const cid = (p.ext && p.ext.cid) || (sqClub && sqClub.id) || (state && state.mine != null && state.teams ? state.teams[state.mine].cid : null);
+  const cid = ownPlayerCid(p) || (p.ext && p.ext.cid) || (sqClub && sqClub.id) || (state && state.mine != null && state.teams ? state.teams[state.mine].cid : null);
   const own = p.pid ? meta.byPid.get(p.pid) : meta.byName.get(p.name);
   if (own && own.n > 1 && cid && own.cid !== cid) return null;
   if (p.pid) return typeof p.pid === "string" ? p.pid : "https://cdn.resfu.com/img_data/players/medium/" + p.pid + ".jpg?size=120x&lossy=1";
@@ -6746,6 +6764,16 @@ function quickSimMatch(){
   else { playRound(); save(); render(); }
 }
 $("#play").onclick = () => { if (!onceOk()) return; quickSimMatch(); };
+function nxAutoDone(){
+  const card = $("#nextCard"), b = $("#nextAuto"); if (!card || !b) return;
+  if (!b._ico) b._ico = b.innerHTML;
+  b.innerHTML = '<svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+  b.classList.add("ok");
+  card.classList.remove("lineup-fx"); void card.offsetWidth; card.classList.add("lineup-fx");
+  clearTimeout(b._t);
+  b._t = setTimeout(() => { b.innerHTML = b._ico; b.classList.remove("ok"); card.classList.remove("lineup-fx"); }, 1400);
+}
+$("#nextAuto").onclick = () => { autoTeam(true); render(); nxAutoDone(); };
 $("#playLive").onclick = () => { if (onceOk()) liveStart(); };
 // ===== partido en directo (reglas y pantalla copiadas de Mister) =====
 const LV_SHOUTS=[
